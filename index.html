@@ -1,0 +1,37 @@
+<!-- index.html - Web Interface -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bangladesh STEM AI</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; }
+        #chat { height: 300px; overflow-y: scroll; border: 1px solid #ddd; padding: 10px; }
+        .user { color: #006a4e; font-weight: bold; }
+        .ai { color: #d35400; }
+    </style>
+</head>
+<body>
+    <h1>Bangladesh STEM AI</h1>
+    <div id="chat"></div>
+    <input id="query" placeholder="Ask math/coding questions...">
+    <button onclick="ask()">Ask</button>
+
+    <script>
+        async function ask() {
+            const query = document.getElementById('query').value;
+            const chat = document.getElementById('chat');
+            
+            chat.innerHTML += `<div class="user">You: ${query}</div>`;
+            
+            const response = await fetch('http://localhost:5000/api', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query })
+            });
+            
+            const data = await response.json();
+            chat.innerHTML += `<div class="ai">AI: ${data.response}</div>`;
+        }
+    </script>
+</body>
+</html>
